@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Getter
 public class ScheduleResponseDto {
     //요청했을 때 응답할 데이터
-    private long id;
+    private Long id;
     private String name;
     private String title;
     private String contents;

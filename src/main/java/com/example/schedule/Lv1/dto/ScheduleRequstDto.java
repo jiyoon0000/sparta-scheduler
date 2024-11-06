@@ -7,7 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 
 public class ScheduleRequstDto {
-    //요청할 데이터
+    //요청할 데이터 (사용자가 입력할 데이터)
     private String name;
     private String password;
     private String title;

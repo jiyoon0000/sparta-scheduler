@@ -12,25 +12,25 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/schedules")
+@RequestMapping("/api/schedules")
 public class ScheduleController {
 
     private final ScheduleService scheduleService;
 
     public ScheduleController(ScheduleService scheduleService){
+
         this.scheduleService = scheduleService;
     }
 
     //스케줄 생성하기
     @PostMapping
-    public ResponseEntity<ScheduleResponseDto> createSchedule(@RequestBody ScheduleRequestDto requestDto){
-        if (requestDto == null) {
-            return ResponseEntity.badRequest().body(null);
+    public ResponseEntity<ScheduleResponseDto> createSchedule(@RequestBody ScheduleRequestDto scheduleRequest){
+        ScheduleResponseDto response = scheduleService.createSchedule(scheduleRequest);
+        if(response == null){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
-        ScheduleResponseDto responseDto = scheduleService.createSchedule(requestDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
+        return ResponseEntity.ok(response);
     }
-
 
     //전체 스케줄 조회
     @GetMapping
@@ -52,4 +52,22 @@ public class ScheduleController {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateSchedule(
+            @PathVariable Long id,
+            @RequestBody ScheduleRequestDto requestDto,
+            @RequestParam int password) {
+        boolean updated = scheduleService.updateSchedule(id, requestDto, password);
+        return updated ? ResponseEntity.ok("Schedule update successfully")
+                        : ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect password");
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteSchedule(
+            @PathVariable Long id,
+            @RequestParam int password) {
+        boolean deleted = scheduleService.deleteSchedule(id,password);
+        return deleted ? ResponseEntity.ok("Schedule delete successfully")
+                        : ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect password");
+    }
 }

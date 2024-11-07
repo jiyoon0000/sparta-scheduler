@@ -2,6 +2,7 @@ package com.example.schedule.Lv2.repository;
 
 import com.example.schedule.Lv2.dto.ScheduleRequestDto;
 import com.example.schedule.Lv2.dto.ScheduleResponseDto;
+import com.example.schedule.Lv2.entity.Schedule;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -28,10 +29,10 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
     }
 
     @Override
-    public ScheduleResponseDto saveSchedule(ScheduleRequestDto scheduleRequest){
+    public Optional<Schedule> saveSchedule(ScheduleRequestDto scheduleRequest){
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("name", scheduleRequest.getName());
-        //parameters.put("password", scheduleRequest.getPassword()); 이거도 주어진 조건대로 주석처리
+        parameters.put("password", scheduleRequest.getPassword());
         parameters.put("title", scheduleRequest.getTitle());
         parameters.put("contents", scheduleRequest.getContents());
         parameters.put("createDate", LocalDateTime.now());
@@ -39,7 +40,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
 
         Number key = simpleJdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
 
-        return findScheduleById(key.longValue()).orElse(null);
+        return findById(key.longValue());
         //return findScheduleById(key.longValue()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule could not be saved "));
     }
 
@@ -60,38 +61,44 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
     }
 
     @Override
-    public List<ScheduleResponseDto> findAllSchedulesByNameAndUpdateDate(String name, String updateDate){
+    public Optional<Schedule> findById(Long id){
         return jdbcTemplate.query(
-                "SELECT * FROM schedules WHERE name = ? AND DATE(updateDate) = ? ORDER BY updateDate DESC",
-                scheduleRowMapper(),
-                name, updateDate
-        );
+                "SELECT * FROM schedules WHERE id = ?",
+                (rs,rowNum) -> {
+                    Schedule schedule = new Schedule();
+                    schedule.setId(rs.getLong("id"));
+                    schedule.setName(rs.getString("name"));
+                    schedule.setPassword(rs.getInt("password"));
+                    schedule.setTitle(rs.getString("title"));
+                    schedule.setContents(rs.getString("contents"));
+                    schedule.setCreateDate(rs.getTimestamp("createDate").toLocalDateTime());
+                    schedule.setUpdateDate(rs.getTimestamp("updateDate").toLocalDateTime());
+                    return schedule;
+                }, id).stream().findFirst();
     }
 
-    @Override
-    public List<ScheduleResponseDto> findAllSchedulesByName(String name){
-        return jdbcTemplate.query(
-                "SELECT * From schedules WHERE name = ? ORDER BY updateDate DESC",
-                scheduleRowMapper(),
-                name
-        );
+    public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto scheduleRequest){
+        String sql = "UPDATE schedules SET name = ?, title = ?, updateDate = ? WHERE id = ?";
+        LocalDateTime now = LocalDateTime.now();
+        jdbcTemplate.update(
+                sql,
+                scheduleRequest.getName(),
+                scheduleRequest.getTitle(),
+                now,
+                id);
+        return findById(id)
+                .map(schedule -> new ScheduleResponseDto(
+                        schedule.getId(),
+                        schedule.getName(),
+                        schedule.getTitle(),
+                        schedule.getContents(),
+                        schedule.getCreateDate(),
+                        schedule.getUpdateDate()
+                )).orElse(null);
     }
 
-    @Override
-    public List<ScheduleResponseDto> findAllSchedulesByUpdateDate(String updateDate){
-        return jdbcTemplate.query(
-                "SELECT * FROM schedules WHERE DATE(updateDate) = ? ORDER BY updateDate DESC",
-                scheduleRowMapper(),
-                updateDate
-        );
-    }
-
-    @Override
-    public Optional<ScheduleResponseDto> findScheduleById(Long id){
-        return jdbcTemplate.query(
-                "SELECT id, name, title, contents, createDate, updateDate FROM schedules WHERE id = ?",
-                scheduleRowMapper(),
-                id
-        ).stream().findAny();
+    public void deleteSchedule(Long id){
+        String sql = "DELETE FROM schedules WHERE id = ?";
+        jdbcTemplate.update(sql, id);
     }
 }

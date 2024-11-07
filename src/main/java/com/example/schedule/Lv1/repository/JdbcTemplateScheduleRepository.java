@@ -2,6 +2,7 @@ package com.example.schedule.Lv1.repository;
 
 import com.example.schedule.Lv1.dto.ScheduleRequestDto;
 import com.example.schedule.Lv1.dto.ScheduleResponseDto;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@Profile("Lv1")
 @Repository
 public class JdbcTemplateScheduleRepository implements ScheduleRepository{
 
@@ -25,15 +27,16 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository{
 
     public JdbcTemplateScheduleRepository(DataSource dataSource){
         this.jdbcTemplate = new JdbcTemplate(dataSource);
-        this.simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
-        simpleJdbcInsert.withTableName("schedules").usingGeneratedKeyColumns("id");
+        this.simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
+                .withTableName("schedules").usingGeneratedKeyColumns("id");
     }
 
+    //스케줄 저장
     @Override
     public ScheduleResponseDto saveSchedule(ScheduleRequestDto scheduleRequest){
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("name", scheduleRequest.getName());
-        //parameters.put("password", scheduleRequest.getPassword()); 이거도 주어진 조건대로 주석처리
+        //parameters.put("password", scheduleRequest.getPassword()); 주어진 조건대로 주석처리
         parameters.put("title", scheduleRequest.getTitle());
         parameters.put("contents", scheduleRequest.getContents());
         parameters.put("createDate", LocalDateTime.now());
@@ -42,9 +45,10 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository{
         Number key = simpleJdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
 
         return findScheduleById(key.longValue()).orElse(null);
-        //return findScheduleById(key.longValue()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule could not be saved "));
     }
 
+    //RowMapper 정의
+    //데이터베이스의 결과를 scheduleResponseDto 객체로 매핑
     private RowMapper<ScheduleResponseDto> scheduleRowMapper(){
         return (rs, rowNum) -> new ScheduleResponseDto(
                 rs.getLong("id"),
@@ -56,11 +60,13 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository{
         );
     }
 
+    //전체 스케줄 조회
     @Override
     public List<ScheduleResponseDto> findAllSchedules(){
         return jdbcTemplate.query("SELECT * FROM schedules ORDER BY updateDate DESC", scheduleRowMapper());
     }
 
+    //이름과 날짜로 스케줄 조회
     @Override
     public List<ScheduleResponseDto> findAllSchedulesByNameAndUpdateDate(String name, String updateDate){
         return jdbcTemplate.query(
@@ -70,6 +76,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository{
         );
     }
 
+    //이름으로 스케줄 조회
     @Override
     public List<ScheduleResponseDto> findAllSchedulesByName(String name){
         return jdbcTemplate.query(
@@ -79,6 +86,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository{
         );
     }
 
+    //수정일 기준으로 스케줄 조회
     @Override
     public List<ScheduleResponseDto> findAllSchedulesByUpdateDate(String updateDate){
         return jdbcTemplate.query(
@@ -88,6 +96,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository{
         );
     }
 
+    //스케줄 id 로 조회
     @Override
     public Optional<ScheduleResponseDto> findScheduleById(Long id){
         return jdbcTemplate.query(

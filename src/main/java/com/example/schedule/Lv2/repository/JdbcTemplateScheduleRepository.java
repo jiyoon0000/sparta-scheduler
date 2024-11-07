@@ -3,6 +3,7 @@ package com.example.schedule.Lv2.repository;
 import com.example.schedule.Lv2.dto.ScheduleRequestDto;
 import com.example.schedule.Lv2.dto.ScheduleResponseDto;
 import com.example.schedule.Lv2.entity.Schedule;
+import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@Profile("Lv2")
 @Repository
 public class JdbcTemplateScheduleRepository implements ScheduleRepository {
 

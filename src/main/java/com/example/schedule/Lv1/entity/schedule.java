@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 public class schedule {
     //schedule 에서 필요한 데이터
-    private Long id;
+    private Long id; //고유 식별자
     private String name;
     private int password;
     private String title;

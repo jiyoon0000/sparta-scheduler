@@ -1,6 +1,6 @@
 package com.example.schedule.Lv1.controller;
 
-import com.example.schedule.Lv1.dto.ScheduleRequstDto;
+import com.example.schedule.Lv1.dto.ScheduleReqeustDto;
 import com.example.schedule.Lv1.dto.ScheduleResponseDto;
 import com.example.schedule.Lv1.repository.JdbcTemplateScheduleRepository;
 import org.springframework.http.HttpStatus;
@@ -18,8 +18,8 @@ public class ScheduleController {
     }
 
     @PostMapping
-    public ResponseEntity<ScheduleResponseDto> createSchedule(@RequestBody ScheduleRequstDto requstDto){
-        ScheduleResponseDto responseDto = scheduleRepository.saveSchedule(requstDto);
+    public ResponseEntity<ScheduleResponseDto> createSchedule(@RequestBody ScheduleReqeustDto reqeustDto){
+        ScheduleResponseDto responseDto = scheduleRepository.saveSchedule(reqeustDto);
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 

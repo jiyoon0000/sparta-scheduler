@@ -1,8 +1,8 @@
-package com.example.schedule.Lv1.controller;
+package com.example.schedule.Lv2.controller;
 
-import com.example.schedule.Lv1.dto.ScheduleRequestDto;
-import com.example.schedule.Lv1.dto.ScheduleResponseDto;
-import com.example.schedule.Lv1.service.ScheduleService;
+import com.example.schedule.Lv2.dto.ScheduleRequestDto;
+import com.example.schedule.Lv2.dto.ScheduleResponseDto;
+import com.example.schedule.Lv2.service.ScheduleService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

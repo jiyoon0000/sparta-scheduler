@@ -1,8 +1,8 @@
-package com.example.schedule.Lv1.service;
+package com.example.schedule.Lv2.service;
 
-import com.example.schedule.Lv1.dto.ScheduleRequestDto;
-import com.example.schedule.Lv1.dto.ScheduleResponseDto;
-import com.example.schedule.Lv1.repository.ScheduleRepository;
+import com.example.schedule.Lv2.dto.ScheduleRequestDto;
+import com.example.schedule.Lv2.dto.ScheduleResponseDto;
+import com.example.schedule.Lv2.repository.ScheduleRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;

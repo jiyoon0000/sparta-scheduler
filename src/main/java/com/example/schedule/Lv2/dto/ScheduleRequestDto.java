@@ -1,4 +1,4 @@
-package com.example.schedule.Lv1.dto;
+package com.example.schedule.Lv2.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

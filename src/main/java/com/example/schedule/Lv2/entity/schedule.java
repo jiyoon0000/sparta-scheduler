@@ -1,4 +1,4 @@
-package com.example.schedule.Lv1.entity;
+package com.example.schedule.Lv2.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

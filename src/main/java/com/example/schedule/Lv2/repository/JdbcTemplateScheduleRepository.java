@@ -1,14 +1,12 @@
-package com.example.schedule.Lv1.repository;
+package com.example.schedule.Lv2.repository;
 
-import com.example.schedule.Lv1.dto.ScheduleRequestDto;
-import com.example.schedule.Lv1.dto.ScheduleResponseDto;
-import org.springframework.http.HttpStatus;
+import com.example.schedule.Lv2.dto.ScheduleRequestDto;
+import com.example.schedule.Lv2.dto.ScheduleResponseDto;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.sql.DataSource;
 import java.time.LocalDateTime;
@@ -18,7 +16,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Repository
-public class JdbcTemplateScheduleRepository implements ScheduleRepository{
+public class JdbcTemplateScheduleRepository implements ScheduleRepository {
 
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert simpleJdbcInsert;

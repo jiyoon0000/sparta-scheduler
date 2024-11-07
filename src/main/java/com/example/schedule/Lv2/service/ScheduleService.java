@@ -58,6 +58,7 @@ public class ScheduleService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Schedule not found"));
     }
 
+    //스케줄 수정
     public boolean updateSchedule(Long id, ScheduleRequestDto scheduleRequest, int password) {
         Optional<Schedule> existingSchedule = scheduleRepository.findById(id);
         if (existingSchedule.isPresent() && existingSchedule.get().getPassword() == password) {
@@ -67,6 +68,7 @@ public class ScheduleService {
         return false;
     }
 
+    //스케줄 삭제
     public boolean deleteSchedule(Long id, int password){
         Optional<Schedule> existingSchedule = scheduleRepository.findById(id);
         if(existingSchedule.isPresent() && existingSchedule.get().getPassword() == password){

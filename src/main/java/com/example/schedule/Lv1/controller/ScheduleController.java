@@ -3,6 +3,7 @@ package com.example.schedule.Lv1.controller;
 import com.example.schedule.Lv1.dto.ScheduleRequestDto;
 import com.example.schedule.Lv1.dto.ScheduleResponseDto;
 import com.example.schedule.Lv1.service.ScheduleService;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,8 +12,9 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.Optional;
 
+@Profile("Lv1")
 @RestController
-@RequestMapping("/schedules")
+@RequestMapping("/api/schedules")
 public class ScheduleController {
 
     private final ScheduleService scheduleService;

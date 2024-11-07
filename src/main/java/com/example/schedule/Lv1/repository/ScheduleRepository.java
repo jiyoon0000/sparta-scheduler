@@ -1,13 +1,18 @@
 package com.example.schedule.Lv1.repository;
 
-import com.example.schedule.Lv1.dto.ScheduleReqeustDto;
+import com.example.schedule.Lv1.dto.ScheduleRequestDto;
 import com.example.schedule.Lv1.dto.ScheduleResponseDto;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface ScheduleRepository {
-    ScheduleResponseDto saveSchedule(ScheduleReqeustDto scheduleRequest);
+    ScheduleResponseDto saveSchedule(ScheduleRequestDto scheduleRequest);
     Optional<ScheduleResponseDto> findScheduleById(Long id);
-    List<ScheduleResponseDto> findAllSchedules(Optional<String> name, Optional<String> updateDate);
+
+    //메소드 정의
+    List<ScheduleResponseDto> findAllSchedulesByNameAndUpdateDate(String name, String updateDate);
+    List<ScheduleResponseDto> findAllSchedulesByName(String name);
+    List<ScheduleResponseDto> findAllSchedulesByUpdateDate(String updateDate);
+    List<ScheduleResponseDto> findAllSchedules();
 }

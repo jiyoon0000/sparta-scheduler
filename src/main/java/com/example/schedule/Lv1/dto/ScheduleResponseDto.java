@@ -17,12 +17,14 @@ public class ScheduleResponseDto {
 
     //Schedule로 지정했어야 했는데, 둘 다 소문자로 하니까 헷갈린다.
     //this 를 사용하여 객체 내부 생성자 및 메서드에서 해당 객체의 생성자 호출
-    public ScheduleResponseDto(schedule schedule){
-        this.id = schedule.getId();
-        this.name = schedule.getName();
-        this.title = schedule.getTitle();
-        this.contents = schedule.getContents();
-        this.createDate = schedule.getCreateDate();
-        this.updateDate = schedule.getUpdateDate();
+    public ScheduleResponseDto(
+            Long id, String name, String title, String contents, LocalDateTime createDate, LocalDateTime updateDate
+            ){
+        this.id = id;
+        this.name = name;
+        this.title = title;
+        this.contents = contents;
+        this.createDate = createDate;
+        this.updateDate = updateDate;
     }
 }

@@ -16,6 +16,7 @@ public class ScheduleResponseDto {
     private LocalDateTime updateDate; //수정일
 
     //this 를 사용하여 객체 내부 생성자 및 메서드에서 해당 객체의 생성자 호출
+    //필드 초기화
     public ScheduleResponseDto(
             Long id, String name, String title, String contents, LocalDateTime createDate, LocalDateTime updateDate
             ){

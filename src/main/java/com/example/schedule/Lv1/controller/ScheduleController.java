@@ -13,12 +13,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Profile("Lv1")//Lv1 프로파일이 활성화될 때 컨트롤러 활성화
-@RestController
+@RestController //Restful 웹 서비스
 @RequestMapping("/api/schedules")//기본 경로 설정
+//Controller class = 사용자의 요청을 받고 응답을 주는 클래스
 public class ScheduleController {
 
     private final ScheduleService scheduleService;
 
+    //this 생성자 사용
     public ScheduleController(ScheduleService scheduleService){
         this.scheduleService = scheduleService;
     }

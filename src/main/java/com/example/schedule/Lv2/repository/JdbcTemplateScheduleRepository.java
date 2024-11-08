@@ -43,7 +43,6 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
         Number key = simpleJdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
 
         return findById(key.longValue());
-        //return findScheduleById(key.longValue()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule could not be saved "));
     }
 
     private RowMapper<ScheduleResponseDto> scheduleRowMapper(){

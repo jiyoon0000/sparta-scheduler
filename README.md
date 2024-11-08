@@ -1,4 +1,8 @@
 # sparta-scheduler 일정관리 앱 만들기
+----
+##### resource -> application.properties -> spring.profiles.active = Lv2
+##### Lv1,2 컨트롤러 동시 실행되서 profiles Lv2로 설정해놓음
+----
 
 ## LV1.일정 생성 및 조회
 

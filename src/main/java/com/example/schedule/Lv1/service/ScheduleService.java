@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 //Lv1 프로파일에서만 활성화
 @Profile("Lv1")
@@ -28,18 +27,18 @@ public class ScheduleService {
     }
 
     //전체 스케줄 조회
-    public List<ScheduleResponseDto> getAllSchedules(Optional<String> name, Optional<String> updateDate){
+    public List<ScheduleResponseDto> getAllSchedules(String name, String updateDate){
         //조건을 주어서 이름, 수정일 기준으로 조회
         //isPresent = optional 객체가 값을 가지고 있다면 true, 아니면 false
         //이름값과 수정일 값을 모두 가지고 있는 경우에 스케줄 조회
-        if(name.isPresent() && updateDate.isPresent()){
-            return scheduleRepository.findAllSchedulesByNameAndUpdateDate(name.get(), updateDate.get());
+        if(name != null && updateDate != null){
+            return scheduleRepository.findAllSchedulesByNameAndUpdateDate(name, updateDate);
             //이름값만 가지고 있는 경우에 스케줄 조회
-        }else if(name.isPresent()){
-            return scheduleRepository.findAllSchedulesByName(name.get());
+        }else if(name != null){
+            return scheduleRepository.findAllSchedulesByName(name);
             //수정일 값만 가지고 있는 경우에 스케줄 조회
-        }else if(updateDate.isPresent()){
-            return scheduleRepository.findAllSchedulesByUpdateDate(updateDate.get());
+        }else if(updateDate != null){
+            return scheduleRepository.findAllSchedulesByUpdateDate(updateDate);
         }
         //결국 어떤 조건에서든 모든 스케줄을 조회하는데 이름과 수정일을 기준으로 조회
         return scheduleRepository.findAllSchedules();

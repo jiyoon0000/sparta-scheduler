@@ -36,7 +36,6 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository{
     public ScheduleResponseDto saveSchedule(ScheduleRequestDto scheduleRequest){
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("name", scheduleRequest.getName());
-        //parameters.put("password", scheduleRequest.getPassword()); 주어진 조건대로 주석처리
         parameters.put("title", scheduleRequest.getTitle());
         parameters.put("contents", scheduleRequest.getContents());
         parameters.put("createDate", LocalDateTime.now());
@@ -44,7 +43,8 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository{
 
         Number key = simpleJdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
 
-        return findScheduleById(key.longValue()).orElse(null);
+        return findScheduleById(key.longValue())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to create schedule"));
     }
 
     //RowMapper 정의

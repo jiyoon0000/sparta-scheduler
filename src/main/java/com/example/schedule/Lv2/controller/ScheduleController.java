@@ -7,10 +7,8 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @Profile("Lv2")
 @RestController
@@ -36,24 +34,17 @@ public class ScheduleController {
 
     //전체 스케줄 조회
     @GetMapping
-    public ResponseEntity<List<ScheduleResponseDto>> getAllSchedules(
-            @RequestParam Optional<String> name,
-            @RequestParam Optional<String> updateDate
-    ){
-        List<ScheduleResponseDto> schedules = scheduleService.getAllSchedules(name, updateDate);
-        return new ResponseEntity<>(schedules, HttpStatus.OK);
+    public ResponseEntity<List<ScheduleResponseDto>> getAllSchedules(){
+        List<ScheduleResponseDto> schedules = scheduleService.getAllSchedules();
+        return ResponseEntity.ok(schedules);
     }
 
     //스케줄 단건 조회
     @GetMapping("/{id}")
     public ResponseEntity<ScheduleResponseDto> getScheduleById(@PathVariable Long id){
-        try{
             //id를 기준으로 조회
             ScheduleResponseDto schedule = scheduleService.getScheduleById(id);
-            return new ResponseEntity<>(schedule, HttpStatus.OK); //조회된 스케줄 반환
-        } catch (ResponseStatusException e){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);//스케줄을 못찾으면 404 응답
-        }
+            return ResponseEntity.ok(schedule); //조회된 스케줄 반환
     }
 
     //스케줄 수정

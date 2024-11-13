@@ -9,9 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Profile("Lv2")
 @Service
@@ -39,16 +38,16 @@ public class ScheduleService {
                         schedule.getCreateDate(),
                         schedule.getUpdateDate()
                         )
-                ).orElse(null); //optional 값이 없는 경우 null 값 반환
-
+                ).orElseThrow(() -> new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,"Falied to create schedule")); //optional 값이 없는 경우 null 값 반환
     }
 
     //전체 스케줄 조회
-    public List<ScheduleResponseDto> getAllSchedules(Optional<String> name, Optional<String> updateDate){
-        //name, updateDate에 맞는 스케줄 조회
-        //lv1이 너무 복잡해서 바꿔봄
+    public List<ScheduleResponseDto> getAllSchedules() {
+        // 내림차순으로 정렬된 스케줄 목록 가져오기
+        // Schedule 리스트를 ScheduleResponseDto 리스트로 변환
         return scheduleRepository.findAllSchedules();
     }
+
 
     //단일 스케줄 조회
     public ScheduleResponseDto getScheduleById(Long id){
@@ -67,9 +66,10 @@ public class ScheduleService {
 
     //스케줄 수정
     public boolean updateSchedule(Long id, ScheduleRequestDto scheduleRequest, int password) {
-        Optional<Schedule> existingSchedule = scheduleRepository.findById(id);
+       Schedule existingSchedule = scheduleRepository.findById(id)
+               .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Schedule not found"));
         //스케줄이 존재하고, 비밀번호가 일치할 때 수정이 가능하다
-        if (existingSchedule.isPresent() && existingSchedule.get().getPassword() == password) {
+        if (existingSchedule.getPassword() == password) {
             scheduleRepository.updateSchedule(id,scheduleRequest);
             return true; //수정 성공
         }
@@ -78,9 +78,10 @@ public class ScheduleService {
 
     //스케줄 삭제
     public boolean deleteSchedule(Long id, int password){
-        Optional<Schedule> existingSchedule = scheduleRepository.findById(id);
+        Schedule existingSchedule = scheduleRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Schedule not found"));
         //스케줄이 존재하고 비밀번호가 일치하면 삭제 가능
-        if(existingSchedule.isPresent() && existingSchedule.get().getPassword() == password){
+        if(existingSchedule.getPassword() == password){
             scheduleRepository.deleteSchedule(id);
             return true;
         }
